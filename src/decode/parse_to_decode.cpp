@@ -10,11 +10,11 @@
 
 std::string recreateWord(std::vector<int32_t> correpondance, int32_t code) {
 
-  if (code == 0) {
-    return "";
+  if ((code >> 16) == 0) {
+    return std::string(1, char(code));
   }
-
-  return recreateWord(correpondance, correpondance.at(code >> 16)) + (char)code;
+  auto word = recreateWord(correpondance, correpondance.at(code >> 16));
+  return word.append(1, char(code));
 }
 
 int32_t parseToDecode(const std::string &path,
@@ -27,16 +27,12 @@ int32_t parseToDecode(const std::string &path,
     close(tube[0]);
     return -1;
   }
-  // int count = 0;
   bool isAchar = false;
-  // int code = 0;
-
-  // init epsilon node
   auto correpondance = std::vector<int32_t>(1, '\0'); // init epsilon node
   int32_t buf = 0;
-  int count = 0;
+
   int diff = 0;
-  auto out = std::ofstream("out_test.text");
+  auto out = std::ofstream("out_test.txt");
   if (!out.is_open()) {
     std::cerr << "fail to open" << std::endl;
     close(tube[0]);
@@ -52,7 +48,7 @@ int32_t parseToDecode(const std::string &path,
       isAchar = false;
       continue;
     }
-    count++;
+
     if (diff == 2) {
 
       correpondance.push_back(buf);
@@ -68,8 +64,10 @@ int32_t parseToDecode(const std::string &path,
       } while (temp == 0);
 
       correpondance.push_back((buf << 16) + temp);
-
-      out << recreateWord(correpondance, buf << 16) << char(temp);
+      auto word = recreateWord(correpondance, buf << 16);
+      out.write(word.data(), word.size() - 1);
+      auto c = char(temp);
+      out.write(&c, sizeof(char));
     }
 
     buf = fd.get();
