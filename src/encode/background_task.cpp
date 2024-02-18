@@ -22,8 +22,8 @@ int32_t writeEncodedData(std::array<int32_t, 2> tube, const std::string &path) {
   ssize_t readCheck = ::read(tube[0], &buf, sizeof(int32_t));
   while (readCheck != -1 && readCheck != 0 && buf != -1) {
     auto payload = intToBytes(buf);
-    fd.write(payload.data(),
-             sizeof(int32_t)); // Write the string to the file
+    fd << payload[0] << payload[1] << payload[2] << payload[3];
+    // Write the string to the file
     readCheck = ::read(tube[0], &buf, sizeof(int32_t));
   }
 

@@ -13,7 +13,7 @@ int32_t encodeToken(int32_t previous, char end) {
   return (previous << 8) + end;
 }
 
-bool isMax(int32_t newTag) { return newTag > (1 << 16) - 1; }
+bool isMax(int32_t newTag) { return newTag > (1 << 24) - 1; }
 
 int32_t parseToEncode(const std::string &path,
                       const std::array<int32_t, 2> tube) {
@@ -46,7 +46,7 @@ int32_t parseToEncode(const std::string &path,
 
       if (auto n = std::make_unique<Node>(newTag);
           temp->append(std::move(n), c) != -1) {
-        buf = temp->getTag() + (c << 16); // value that will be encoded
+        buf = temp->getTag() + (c << 24); // value that will be encoded
 
         write(tube[1], &buf,
               sizeof(int32_t)); // send to background task to write

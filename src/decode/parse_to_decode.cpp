@@ -8,12 +8,18 @@
 #include <unistd.h>
 #include <vector>
 
+int32_t bytesToInt(std::array<char, 4> buf) {
+  return static_cast<int32_t>(buf[3]) | static_cast<int32_t>(buf[0]) << 8 |
+         static_cast<int32_t>(buf[1]) << 16 |
+         static_cast<int32_t>(buf[2]) << 24;
+}
+
 std::string recreateWord(std::vector<int32_t> correpondance, int32_t code) {
 
-  if ((code >> 16) == 0) {
+  if ((code >> 8) == 0) {
     return std::string(1, char(code));
   }
-  auto word = recreateWord(correpondance, correpondance.at(code >> 16));
+  auto word = recreateWord(correpondance, correpondance.at(code >> 8));
   return word.append(1, char(code));
 }
 
@@ -27,9 +33,9 @@ int32_t parseToDecode(const std::string &path,
     close(tube[0]);
     return -1;
   }
-  bool isAchar = false;
+
   auto correpondance = std::vector<int32_t>(1, '\0'); // init epsilon node
-  int32_t buf = 0;
+  std::array<char, 4> buf;
 
   int diff = 0;
   auto out = std::ofstream("out_test.txt");
@@ -38,41 +44,23 @@ int32_t parseToDecode(const std::string &path,
     close(tube[0]);
     return -1;
   }
+  long check = 0;
+  check = fd.readsome(buf.data(), sizeof(char) * 4);
+  while (check != EOF) {
 
-  while (buf != EOF) {
-    isAchar = !isAchar;
-
-    buf = fd.get();
-    if (buf == 0) {
-      diff++;
-      isAchar = false;
-      continue;
+    for (int i = 0; i < 4; i++) {
+      std::cout << "buf[" << i << "] : " << buf[i] << std::endl;
     }
-
-    if (diff == 2) {
-
-      correpondance.push_back(buf);
-
-      out << char(buf);
-      diff = 0;
-    } else {
-      int temp;
-      diff = 0;
-      do {
-        temp = fd.get();
-
-      } while (temp == 0);
-
-      correpondance.push_back((buf << 16) + temp);
-      auto word = recreateWord(correpondance, buf << 16);
-      out.write(word.data(), word.size() - 1);
-      auto c = char(temp);
-      out.write(&c, sizeof(char));
+    int code = bytesToInt(buf);
+    if (code < 0) {
+      break;
     }
-
-    buf = fd.get();
+    std::cout << "code : " << code << std::endl;
+    out << recreateWord(correpondance, code);
+    correpondance.push_back(code);
+    check = fd.readsome(buf.data(), sizeof(char) * 4);
   }
-
+  out << std::endl;
   out.close();
   close(tube[0]);
   return 1;
