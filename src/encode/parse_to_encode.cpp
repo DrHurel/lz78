@@ -11,9 +11,11 @@
 
 bool isMax(int32_t newTag) { return newTag > (1 << 24) - 1; }
 
+struct tag_out_of_size : public std::exception {};
+
 std::array<char, 4> codeToBuf(int tag, char c) {
   if (tag > (1 << 24) - 1) {
-    throw std::runtime_error("tag is too big");
+    throw tag_out_of_size();
   }
 
   return {static_cast<char>(tag), static_cast<char>(tag >> 8),
@@ -44,7 +46,12 @@ int32_t parseToEncode(const std::string &path,
   while (c != EOF) {
 
     if (isMax(newTag)) { // max code size
-      return -1;         // error
+      auto end = '\0';
+      write(tube[1], &end, sizeof(char));
+      fd.close();
+      close(tube[1]);
+
+      return -1; // error
     }
 
     if (!temp->hasChild(c)) {
