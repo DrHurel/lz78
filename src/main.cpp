@@ -38,17 +38,10 @@ int32_t main(int32_t argc, char *argv[]) {
   }
 
   if (std::string(argv[1]) == "decode") {
-    if ((pid = fork()) == -1) {
-      exit(EXIT_FAILURE);
-    } else if (pid != 0) {
-      std::cout << "Decompressing..." << std::endl;
-      parseToDecode(argv[2], tube);
-      std::cout << "Decompressing done" << std::endl;
-    } else {
-      std::cout << "Writing..." << std::endl;
-      writeDecodedText(tube, std::string(argv[2]) + ".text");
-      std::cout << "Writing : done" << std::endl;
-    }
+
+    std::cout << "Decompressing..." << std::endl;
+    parseToDecode(argv[2]);
+    std::cout << "Decompressing done" << std::endl;
   }
 
   waitpid(-1, &status, 0);

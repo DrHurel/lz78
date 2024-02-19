@@ -35,14 +35,13 @@ recreateWord(std::vector<std::shared_ptr<struct Token>> correpondance,
   return word.append(1, token->terminal_char);
 }
 
-int32_t parseToDecode(const std::string &path,
-                      const std::array<int32_t, 2> tube) {
+int32_t parseToDecode(const std::string &path) {
 
   auto fd = std::ifstream(path);
 
   if (!fd.is_open()) {
     std::cerr << "fail to open" << std::endl;
-    close(tube[0]);
+
     return -1;
   }
 
@@ -53,7 +52,7 @@ int32_t parseToDecode(const std::string &path,
   auto out = std::ofstream("out_test.txt");
   if (!out.is_open()) {
     std::cerr << "fail to open" << std::endl;
-    close(tube[0]);
+
     return -1;
   }
   long check = 0;
@@ -95,6 +94,6 @@ int32_t parseToDecode(const std::string &path,
   out << std::endl;
   out.close();
   std::cout << "close" << std::endl;
-  close(tube[0]);
+  fd.close();
   return 1;
 }

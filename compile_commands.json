@@ -9,28 +9,11 @@
       "-Iinclude",
       "-c",
       "-o",
-      "src/main.o",
-      "src/main.cpp"
+      "src/encode/parse_to_encode.o",
+      "src/encode/parse_to_encode.cpp"
     ],
     "directory": "/root/lz78",
-    "file": "/root/lz78/src/main.cpp",
-    "output": "/root/lz78/src/main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/g++",
-      "-std=c++17",
-      "-Wall",
-      "-Wextra",
-      "-g",
-      "-Iinclude",
-      "-c",
-      "-o",
-      "src/utils/node.o",
-      "src/utils/node.cpp"
-    ],
-    "directory": "/root/lz78",
-    "file": "/root/lz78/src/utils/node.cpp",
-    "output": "/root/lz78/src/utils/node.o"
+    "file": "/root/lz78/src/encode/parse_to_encode.cpp",
+    "output": "/root/lz78/src/encode/parse_to_encode.o"
   }
 ]
