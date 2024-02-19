@@ -3,24 +3,36 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <unistd.h>
 #include <vector>
 
-int32_t bytesToInt(std::array<char, 4> buf) {
-  return static_cast<int32_t>(buf[3]) | static_cast<int32_t>(buf[0]) << 8 |
-         static_cast<int32_t>(buf[1]) << 16 |
-         static_cast<int32_t>(buf[2]) << 24;
+struct Token {
+  int32_t token;
+  unsigned char terminal_char;
+};
+
+struct Token extractData(std::array<char, 4> buf) {
+  unsigned char terminal_char = buf.at(3);
+  int32_t token = 0;
+  for (int i = 0; i < 3; i++) {
+    token |= static_cast<int32_t>((unsigned char)buf.at(i)) << (i * 8);
+  }
+
+  return {token, terminal_char};
 }
 
-std::string recreateWord(std::vector<int32_t> correpondance, int32_t code) {
+std::string
+recreateWord(std::vector<std::shared_ptr<struct Token>> correpondance,
+             std::shared_ptr<struct Token> token) {
 
-  if ((code >> 8) == 0) {
-    return std::string(1, char(code));
+  if (token->token == 0) {
+    return std::string(1, token->terminal_char);
   }
-  auto word = recreateWord(correpondance, correpondance.at(code >> 8));
-  return word.append(1, char(code));
+  auto word = recreateWord(correpondance, correpondance.at(token->token));
+  return word.append(1, token->terminal_char);
 }
 
 int32_t parseToDecode(const std::string &path,
@@ -34,10 +46,10 @@ int32_t parseToDecode(const std::string &path,
     return -1;
   }
 
-  auto correpondance = std::vector<int32_t>(1, '\0'); // init epsilon node
+  auto correpondance = std::vector<std::shared_ptr<struct Token>>(
+      1, nullptr); // init epsilon node
   std::array<char, 4> buf;
 
-  int diff = 0;
   auto out = std::ofstream("out_test.txt");
   if (!out.is_open()) {
     std::cerr << "fail to open" << std::endl;
@@ -48,16 +60,20 @@ int32_t parseToDecode(const std::string &path,
   check = fd.readsome(buf.data(), sizeof(char) * 4);
   while (check != EOF) {
 
-    for (int i = 0; i < 4; i++) {
-      std::cout << "buf[" << i << "] : " << buf[i] << std::endl;
-    }
-    int code = bytesToInt(buf);
-    if (code < 0) {
+    auto data = extractData(buf);
+    std::cout << "data.token : " << data.token << std::endl;
+    std::cout << "data.char : " << data.terminal_char << std::endl;
+
+    if (data.token > correpondance.size() || data.token < 0) {
+      std::cout << "break" << std::endl;
+      std::cout << correpondance.size() << std::endl;
+
       break;
     }
-    std::cout << "code : " << code << std::endl;
-    out << recreateWord(correpondance, code);
-    correpondance.push_back(code);
+    auto payload = std::make_shared<struct Token>(data);
+    out << recreateWord(correpondance, std::shared_ptr<struct Token>(payload));
+
+    correpondance.push_back(std::make_unique<struct Token>(data));
     check = fd.readsome(buf.data(), sizeof(char) * 4);
   }
   out << std::endl;

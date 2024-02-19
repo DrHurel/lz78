@@ -9,21 +9,26 @@
 #include <memory>
 #include <unistd.h>
 
-int32_t encodeToken(int32_t previous, char end) {
-  return (previous << 8) + end;
-}
-
 bool isMax(int32_t newTag) { return newTag > (1 << 24) - 1; }
+
+std::array<char, 4> codeToBuf(int tag, char c) {
+  if (tag > (1 << 24) - 1) {
+    throw std::runtime_error("tag is too big");
+  }
+
+  return {static_cast<char>(tag), static_cast<char>(tag >> 8),
+          static_cast<char>(tag >> 16), c};
+}
 
 int32_t parseToEncode(const std::string &path,
                       const std::array<int32_t, 2> tube) {
 
   auto node = std::make_shared<Node>(0); // init epsilon node
-  int32_t newTag = 1;
+  uint32_t newTag = 1;
 
   auto temp = std::shared_ptr<Node>(node); // temp node to navigate the tree
 
-  int32_t buf;
+  auto buf = std::array<char, 4>();
   // ------ FILE READING ------
   std::ifstream fd;
   fd.open(path);
@@ -46,10 +51,10 @@ int32_t parseToEncode(const std::string &path,
 
       if (auto n = std::make_unique<Node>(newTag);
           temp->append(std::move(n), c) != -1) {
-        buf = temp->getTag() + (c << 24); // value that will be encoded
+        buf = codeToBuf(temp->getTag(), (char)c); // value that will be encoded
 
-        write(tube[1], &buf,
-              sizeof(int32_t)); // send to background task to write
+        write(tube[1], buf.data(),
+              buf.size()); // send to background task to write
         ++newTag;
         temp = std::shared_ptr<Node>(node);
 
@@ -63,8 +68,8 @@ int32_t parseToEncode(const std::string &path,
     }
     c = fd.get();
   }
-  buf = -1;
-  write(tube[1], &buf, sizeof(int32_t));
+  auto end = '\0';
+  write(tube[1], &end, sizeof(char));
   fd.close();
 
   close(tube[1]);

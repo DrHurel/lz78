@@ -12,19 +12,19 @@ std::array<char, 4> intToBytes(int32_t buf) {
 }
 
 int32_t writeEncodedData(std::array<int32_t, 2> tube, const std::string &path) {
-  int32_t buf;
+  auto buf = std::array<char, 4>();
   std::ofstream fd;
   fd.open(path);
   if (!fd.is_open()) {
     return -1;
   }
 
-  ssize_t readCheck = ::read(tube[0], &buf, sizeof(int32_t));
-  while (readCheck != -1 && readCheck != 0 && buf != -1) {
-    auto payload = intToBytes(buf);
-    fd << payload[0] << payload[1] << payload[2] << payload[3];
+  ssize_t readCheck = ::read(tube[0], buf.data(), 4);
+  while (readCheck != -1 && readCheck != 1) {
+
+    fd.write(buf.data(), 4);
     // Write the string to the file
-    readCheck = ::read(tube[0], &buf, sizeof(int32_t));
+    readCheck = ::read(tube[0], buf.data(), 4);
   }
 
   fd << std::endl;
