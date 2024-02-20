@@ -33,3 +33,5 @@
 
 output
 .cache
+*.lz
+*.txt
