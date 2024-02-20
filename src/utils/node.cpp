@@ -15,6 +15,6 @@ int32_t Node::append(std::shared_ptr<Node> node, int32_t key) {
   return 1;
 }
 
-bool Node::hasChild(int32_t key) const { return _chidren[key] != nullptr; }
+bool Node::hasChild(int32_t key) const { return _chidren.at(key) != nullptr; }
 
 std::shared_ptr<Node> Node::getChild(int32_t k) const { return _chidren[k]; }

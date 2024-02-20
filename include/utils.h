@@ -7,7 +7,7 @@
 class Node {
 
   int32_t _tag;
-  std::array<std::shared_ptr<Node>, 128> _chidren;
+  std::array<std::shared_ptr<Node>, 256> _chidren;
 
 public:
   explicit Node(int32_t tag);

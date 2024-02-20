@@ -13,7 +13,11 @@
             "linux": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "gdb",
-                "program": "${workspaceFolder}/output/main"
+                "program": "${workspaceFolder}/output/main",
+                "args": [
+                    "compress",
+                    "test.txt"
+                ]
             },
             "osx": {
                 "MIMode": "lldb",

@@ -25,12 +25,13 @@ std::array<char, 4> codeToBuf(int tag, char c) {
 int32_t parseToEncode(const std::string &path,
                       const std::array<int32_t, 2> tube) {
 
-  auto node = std::make_shared<Node>(0); // init epsilon node
+  auto node_ptr = std::make_shared<Node>(0); // init epsilon node
   uint32_t newTag = 1;
+  std::cout << "Start" << std::endl;
+  auto temp = node_ptr;
 
-  auto temp = std::shared_ptr<Node>(node); // temp node to navigate the tree
-
-  auto buf = std::array<char, 4>();
+  auto buf = std::array<char, 4>({0, 0, 0, 0});
+  std::cout << "array created" << std::endl;
   // ------ FILE READING ------
   std::ifstream fd;
   fd.open(path);
@@ -44,7 +45,7 @@ int32_t parseToEncode(const std::string &path,
 
   int32_t c = fd.get(); // read first char
   while (c != EOF) {
-
+    // 894
     if (isMax(newTag)) { // max code size
       auto end = '\0';
       write(tube[1], &end, sizeof(char));
@@ -55,15 +56,16 @@ int32_t parseToEncode(const std::string &path,
     }
 
     if (!temp->hasChild(c)) {
-
-      if (auto n = std::make_unique<Node>(newTag);
-          temp->append(std::move(n), c) != -1) {
+      std::cout << "c: " << c << std::endl;
+      std::cout << "newTag: " << newTag << std::endl;
+      if (auto n = std::make_shared<Node>(newTag); temp->append(n, c) != -1) {
         buf = codeToBuf(temp->getTag(), (char)c); // value that will be encoded
 
         write(tube[1], buf.data(),
               buf.size()); // send to background task to write
         ++newTag;
-        temp = std::shared_ptr<Node>(node);
+
+        temp = node_ptr;
 
       } else {
         std::cerr << "node->append fail " << std::endl;
@@ -73,6 +75,7 @@ int32_t parseToEncode(const std::string &path,
     } else {
       temp = temp->getChild(c);
     }
+
     c = fd.get();
   }
   auto end = '\0';
