@@ -1,9 +1,9 @@
 #include "utils.h"
 #include <sys/types.h>
 
-Node::Node(int32_t tag) : _tag(tag) {}
+Node::Node(uint32_t tag) : _tag(tag) {}
 
-int32_t Node::getTag() const { return _tag; }
+uint32_t Node::getTag() const { return _tag; }
 int32_t Node::append(std::shared_ptr<Node> node, int32_t key) {
 
   if (_chidren[key] != nullptr) {

@@ -36,9 +36,13 @@ int32_t main(int32_t argc, char *argv[]) {
   }
 
   if (std::string(argv[1]) == "decode") {
-
+    if (argc < 4) {
+      std::cout << "usage : " << argv[0] << " decode [target] [outpath]"
+                << std::endl;
+      exit(EXIT_FAILURE);
+    }
     std::cout << "Decompressing..." << std::endl;
-    parseToDecode(argv[2]);
+    parseToDecode(argv[2], argv[3]);
     std::cout << "Decompressing done" << std::endl;
   }
 

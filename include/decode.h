@@ -3,5 +3,5 @@
 
 #include <string>
 
-int32_t parseToDecode(const std::string &path);
+int32_t parseToDecode(const std::string &path, const std::string &outpath);
 #endif // DECODE_H
