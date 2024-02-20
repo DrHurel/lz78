@@ -16,8 +16,8 @@ int32_t writeEncodedData(std::array<int32_t, 2> tube, const std::string &path) {
     throw failed_to_open(path);
   }
 
-  ssize_t readCheck = ::read(tube[0], buf.data(), 4);
-  while (readCheck != 1) {
+  ssize_t readCheck = read(tube[0], buf.data(), 4);
+  while (readCheck != 1) { // not standard ? may create bug
 
     fd.write(buf.data(), buf.size());
     // Write the string to the file

@@ -33,6 +33,8 @@ public:
   uint32_t getTag() const;
   unsigned char getTerminalChar() const;
 };
+std::string recreateWord(std::vector<std::shared_ptr<Token>> correpondance,
+                         std::shared_ptr<Token> token);
 
 struct invalid_buf_size : public std::exception {};
 struct tag_out_of_size : public std::exception {};

@@ -26,11 +26,113 @@
       "-Iinclude",
       "-c",
       "-o",
+      "src/encode/background_task.o",
+      "src/encode/background_task.cpp"
+    ],
+    "directory": "/root/lz78",
+    "file": "/root/lz78/src/encode/background_task.cpp",
+    "output": "/root/lz78/src/encode/background_task.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/encode/background_task_dynamic.o",
+      "src/encode/background_task_dynamic.cpp"
+    ],
+    "directory": "/root/lz78",
+    "file": "/root/lz78/src/encode/background_task_dynamic.cpp",
+    "output": "/root/lz78/src/encode/background_task_dynamic.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/encode/parse_to_encode.o",
+      "src/encode/parse_to_encode.cpp"
+    ],
+    "directory": "/root/lz78",
+    "file": "/root/lz78/src/encode/parse_to_encode.cpp",
+    "output": "/root/lz78/src/encode/parse_to_encode.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/decode/parse_to_decode.o",
+      "src/decode/parse_to_decode.cpp"
+    ],
+    "directory": "/root/lz78",
+    "file": "/root/lz78/src/decode/parse_to_decode.cpp",
+    "output": "/root/lz78/src/decode/parse_to_decode.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/decode/parse_to_decode_dynamic.o",
+      "src/decode/parse_to_decode_dynamic.cpp"
+    ],
+    "directory": "/root/lz78",
+    "file": "/root/lz78/src/decode/parse_to_decode_dynamic.cpp",
+    "output": "/root/lz78/src/decode/parse_to_decode_dynamic.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
       "src/utils/node.o",
       "src/utils/node.cpp"
     ],
     "directory": "/root/lz78",
     "file": "/root/lz78/src/utils/node.cpp",
     "output": "/root/lz78/src/utils/node.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/utils/token.o",
+      "src/utils/token.cpp"
+    ],
+    "directory": "/root/lz78",
+    "file": "/root/lz78/src/utils/token.cpp",
+    "output": "/root/lz78/src/utils/token.o"
   }
 ]

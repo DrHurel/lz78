@@ -73,7 +73,7 @@ int32_t parseToEncode(const std::string &path,
 
     c = fd.get();
   }
-  auto end = '\0';
+  auto end = EOF;
   write(tube.at(1), &end, sizeof(char));
   fd.close();
 

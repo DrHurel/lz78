@@ -30,7 +30,7 @@ int32_t main(int32_t argc, char *argv[]) {
       std::cout << "Compressing done" << std::endl;
     } else {
       std::cout << "Writing..." << std::endl;
-      writeEncodedData(tube, std::string(argv[2]) + ".lz");
+      writeEncodedDataDynamic(tube, std::string(argv[2]) + ".lz");
       std::cout << "Writing : done" << std::endl;
     }
   }
@@ -42,7 +42,7 @@ int32_t main(int32_t argc, char *argv[]) {
       exit(EXIT_FAILURE);
     }
     std::cout << "Decompressing..." << std::endl;
-    parseToDecode(argv[2], argv[3]);
+    parseToDecodeDynamic(argv[2], argv[3]);
     std::cout << "Decompressing done" << std::endl;
   }
 
