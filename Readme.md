@@ -21,13 +21,13 @@ To get started with this project, follow these steps:
 1. Clone the repository: `git clone https://github.com/DrHurel/lz78.git`
 2. Navigate to the project directory: `cd lz78`
 3. Build the project: `make`
-4. Run the compression algorithm: `./lz78 --compress input.txt output.lz78`
-5. Run the decompression algorithm: `./lz78 --decompress output.lz78 output.txt`
+4. Run the compression algorithm: `./lz78 compress input.txt`
+5. Run the decompression algorithm: `./lz78 decode output.lz output.txt`
 
 ## Usage
 
 The project provides two main options:
 
-- `lz78 --compress`: Compresses a given input file using the LZ78 algorithm and saves the compressed output to a specified file.
-- `lz78 --decompress`: Decompresses a given LZ78 compressed file and saves the decompressed output to a specified file.
+- `lz78 compress`: Compresses a given input file using the LZ78 algorithm and saves the compressed output to a specified file.
+- `lz78 decode`: Decode a given LZ78 compressed file and saves the decompressed output to a specified file.
 
