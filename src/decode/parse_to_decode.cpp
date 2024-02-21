@@ -17,7 +17,7 @@ int32_t parseToDecode(const std::string &path, const std::string &outpath) {
     throw failed_to_open(path);
   }
 
-  auto correpondance =
+  auto matching_tab =
       std::vector<std::shared_ptr<Token>>(1, nullptr); // init epsilon node
   char buf;
   auto payload = std::vector<unsigned char>();
@@ -46,9 +46,9 @@ int32_t parseToDecode(const std::string &path, const std::string &outpath) {
       auto token = Token(payload);
 
       auto token_ptr = std::make_shared<Token>(token);
-      out << recreateWord(correpondance, std::shared_ptr<Token>(token_ptr));
+      out << recreateWord(matching_tab, std::shared_ptr<Token>(token_ptr));
 
-      correpondance.push_back(std::make_unique<Token>(token));
+      matching_tab.push_back(std::make_unique<Token>(token));
       payload.clear();
     } else {
       payload.push_back((unsigned char)buf);

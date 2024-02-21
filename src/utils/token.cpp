@@ -1,5 +1,15 @@
 #include "utils.h"
 
+/**
+ * The Token constructor initializes the _terminal_char and _tag members based
+ * on the input buffer, performing size validation and bitwise operations.
+ *
+ * @param buf The `buf` parameter is a vector of unsigned characters that is
+ * used to initialize the `Token` object. The constructor takes the fourth
+ * element of the vector and assigns it to the
+ * `_terminal_char` member variable. It then combines the first three elements
+ * of the vector to form a 32-bit tag
+ */
 Token::Token(std::vector<unsigned char> buf) : _terminal_char(buf.at(3)) {
   if (buf.size() != 4) {
     throw invalid_buf_size();
@@ -13,10 +23,7 @@ Token::Token(std::vector<unsigned char> buf) : _terminal_char(buf.at(3)) {
   }
 };
 
-Token::Token(unsigned char terminal_char)
-    : _terminal_char(terminal_char){
-
-      };
+Token::Token(unsigned char terminal_char) : _terminal_char(terminal_char){};
 
 /**
  * @brief return the tag of the token which is the index of the previous token.

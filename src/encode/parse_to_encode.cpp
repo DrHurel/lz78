@@ -52,9 +52,9 @@ int32_t parseToEncode(const std::string &path,
       return -1; // error
     }
 
-    if (!temp->hasChild(c)) {
-
-      if (auto n = std::make_shared<Node>(newTag); temp->append(n, c) != -1) {
+    if (!temp->hasChild(c)) { // add the char as terminal for the current tree
+      auto n = std::make_shared<Node>(newTag);
+      if (temp->append(n, c) != -1) {
         buf = codeToBuf(temp->getTag(), (char)c); // value that will be encoded
 
         write(tube.at(1), buf.data(),
@@ -67,7 +67,7 @@ int32_t parseToEncode(const std::string &path,
         throw node_failed_to_append();
       }
 
-    } else {
+    } else { // go to the next node (it save the redondant part of the text)
       temp = temp->getChild(c);
     }
 

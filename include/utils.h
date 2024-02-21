@@ -10,7 +10,7 @@
 class Node {
 
   uint32_t _tag;
-  std::array<std::shared_ptr<Node>, 256> _chidren;
+  std::array<std::shared_ptr<Node>, 256> _chidren; // 256 ascii characters
 
 public:
   explicit Node(uint32_t tag);
@@ -33,7 +33,7 @@ public:
   uint32_t getTag() const;
   unsigned char getTerminalChar() const;
 };
-std::string recreateWord(std::vector<std::shared_ptr<Token>> correpondance,
+std::string recreateWord(std::vector<std::shared_ptr<Token>> matching_tab,
                          std::shared_ptr<Token> token);
 
 struct invalid_buf_size : public std::exception {};

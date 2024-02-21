@@ -21,14 +21,17 @@ int32_t writeEncodedDataDynamic(std::array<int32_t, 2> tube,
   ssize_t readCheck = read(tube[0], buf.data(), 4);
   while (readCheck != 1) { // not standard ? may create bug
     bits_readed++;
-    if (bits_field == 2 && bits_readed > 256) {
+    if (bits_field == 2 &&
+        bits_readed > 256) { // check the amount of bits needed to encode the
+                             // current token
       bits_field = 3;
     }
     if (bits_field == 3 && bits_readed > 65536) {
       bits_field = 4;
     }
     auto payload = std::vector<char>();
-    switch (bits_field) {
+    switch (bits_field) { // used to make sure the payload is the right size
+                          // (made to avoid a bigger refactoring)
     case 2:
       payload.push_back(buf[0]);
       payload.push_back(buf[3]);
@@ -48,8 +51,8 @@ int32_t writeEncodedDataDynamic(std::array<int32_t, 2> tube,
       break;
     }
 
-    fd.write(payload.data(), payload.size());
-    // Write the string to the file
+    fd.write(payload.data(), payload.size()); // Write the string to the file
+
     readCheck = ::read(tube[0], buf.data(), 4);
     payload.clear();
   }
