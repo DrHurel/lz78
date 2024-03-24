@@ -24,7 +24,6 @@ int32_t parseToDecode(const std::string &path, const std::string &outpath) {
   auto out = std::ofstream(outpath);
   if (!out.is_open()) {
     throw failed_to_open(outpath);
-    return -1;
   }
   long check = 0;
   int count = 0;

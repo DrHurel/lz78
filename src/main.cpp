@@ -2,6 +2,7 @@
 #include "encode.h"
 
 #include <array>
+#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <ostream>
@@ -9,6 +10,8 @@
 #include <unistd.h>
 
 int32_t main(int32_t argc, char *argv[]) {
+
+  std::printf("%d %d\n", (int)true & 0b11, false);
 
   int32_t status;
   if (argc < 3) {
